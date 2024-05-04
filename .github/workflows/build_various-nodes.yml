@@ -2,7 +2,7 @@ name: Node.js CI - different engines
 
 on:
   workflow_dispatch:
-  push:
+  # push:
 
 jobs:
   build:
