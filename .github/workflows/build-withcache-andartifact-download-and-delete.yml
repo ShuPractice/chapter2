@@ -2,7 +2,7 @@ name: Node.js CI - with cache
 
 on:
   workflow_dispatch:
-  # push:
+  push:
 
 jobs:
   build:
@@ -39,3 +39,18 @@ jobs:
       with:
         name: my-app
         path: app/dist/
+        retention-days: 1
+
+  deploy-job:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: my-app
+          path: downloaded-content
+      - run: |
+          ls downloaded-content
+      - uses: geekyeggo/delete-artifact@v5
+        with:
+          name: my-app
