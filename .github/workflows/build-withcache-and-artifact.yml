@@ -2,7 +2,7 @@ name: Node.js CI - with cache
 
 on:
   workflow_dispatch:
-  # push:
+  push:
 
 jobs:
   build:
@@ -35,3 +35,7 @@ jobs:
       with:
         path: ~/.npm
         key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json')}}
+    - uses: actions/upload-artifact@v4
+      with:
+        name: my-app
+        path: app/dist/
