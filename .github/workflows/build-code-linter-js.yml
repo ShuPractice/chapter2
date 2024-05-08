@@ -33,10 +33,10 @@ jobs:
         run: |
           npm ci
           npm run build --if-present
-      - name: Run linters
+      - name: Run linter
         uses: wearerequired/lint-action@v2
         with:
-          eslint: false
-          prettier: false
+          eslint: true
+          continue_on_error: false
           github_token: ${{ steps.generate_token.outputs.token }}
           auto_fix: false
