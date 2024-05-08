@@ -1,0 +1,42 @@
+name: Lint Javascript Code
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  checks: write
+  contents: write
+
+jobs:
+  run-linters:
+    name: Run linters
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@v2
+        with:
+          app_id: ${{ secrets.APP_ID}}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.x
+          cache: "npm"
+          cache-dependency-path: app/package-lock.json
+      - name: Install Node.js dependencies
+        working-directory: app/
+        run: |
+          npm ci
+          npm run build --if-present
+      - name: Run linters
+        uses: wearerequired/lint-action@v2
+        with:
+          eslint: false
+          prettier: false
+          github_token: ${{ steps.generate_token.outputs.token }}
+          auto_fix: false
